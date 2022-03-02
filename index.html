@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./assets/favicon/site.webmanifest" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Sâm lốc</title>
+  </head>
+  <body>
+    <div class="body d-flex">
+      <div class="game_container">
+        <div class="init row">
+          <div class="input-field col s6 init_name">
+            <input
+              type="text"
+              id="ip_name"
+              class="input_name"
+              placeholder="Name ?"
+            />
+          </div>
+          <div class="input-field col s6">
+            <select class="slit">
+              <option value="" disabled selected>Pick slot</option>
+              <option value="1">Slot 1</option>
+              <option value="2">Slot 2</option>
+              <option value="3">Slot 3</option>
+              <option value="4">Slot 4</option>
+              <option value="5">Slot 5</option>
+            </select>
+            <label>Slot</label>
+          </div>
+        </div>
+
+        <div class="p_name">
+          <ul class="collection d-flex sp_bw">
+            <li class="collection-item name_p1 name_p">Name</li>
+            <li class="collection-item name_p2 name_p">Name</li>
+            <li class="collection-item name_p3 name_p">Name</li>
+            <li class="collection-item name_p4 name_p">Name</li>
+            <li class="collection-item name_p5 name_p">Name</li>
+          </ul>
+        </div>
+        <div class="p_score">
+          <ul class="collection d-flex sp_bw">
+            <li class="collection-item total score_p1">0</li>
+            <li class="collection-item total score_p2">0</li>
+            <li class="collection-item total score_p3">0</li>
+            <li class="collection-item total score_p4">0</li>
+            <li class="collection-item total score_p5">0</li>
+          </ul>
+        </div>
+        <div class="d-flex justi-ar">
+          <input
+            list="browsers"
+            type="text"
+            placeholder="Click"
+            class="input_score input_p1"
+          />
+          <input
+            list="browsers"
+            type="text"
+            placeholder="ở đây"
+            class="input_score input_p2"
+          />
+          <input
+            list="browsers"
+            type="text"
+            placeholder="để"
+            class="input_score input_p3"
+          />
+          <input
+            list="browsers"
+            type="text"
+            placeholder="nhập"
+            class="input_score input_p4"
+          />
+          <input
+            list="browsers"
+            type="text"
+            placeholder="điểm"
+            class="input_score input_p5"
+          />
+          <datalist id="browsers">
+            <option value="-1"></option>
+            <option value="-2"></option>
+            <option value="-3"></option>
+            <option value="-4"></option>
+            <option value="-5"></option>
+            <option value="-6"></option>
+            <option value="-7"></option>
+            <option value="-8"></option>
+            <option value="-9"></option>
+            <option value="-10"></option>
+            <option value="-15"></option>
+            <option value="-20"></option>
+          </datalist>
+        </div>
+        <div class="score_table">
+          <table class="striped highlight centered">
+            <tbody class="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="chart_container">
+        <h5>Thống kê</h5>
+        <canvas id="myChart" style="width: 100%; max-width: 700px"></canvas>
+        <a class="btn btn_add waves-effect waves-purple btn-large">ADD</a>
+        <a class="btn btn_clr waves-effect waves-purple btn-large">Clear</a>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./assets/app.js"></script>
+  <script type="text/javascript">
+    window.onbeforeunload = function () {
+      return "Dude, are you sure you want to leave? Think of the kittens!";
+    };
+  </script>
+</html>
