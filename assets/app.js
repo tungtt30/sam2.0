@@ -23,9 +23,14 @@ let isPlaying = false
 btn_audio.addEventListener('click', () => {
     if (isPlaying) {
         audio.pause()
+        isPlaying = false
+        return 0
+    } else {
+        audio.play()
+        isPlaying = true
+        return 1
     }
-    audio.play()
-    isPlaying = true
+
 })
 audio.addEventListener('ended', () => {
     isPlaying = false
