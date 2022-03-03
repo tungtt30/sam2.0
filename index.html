@@ -76,31 +76,31 @@
         <div class="d-flex justi-ar">
           <input
             list="browsers"
-            type="text"
+            type="number"
             placeholder="Click"
             class="input_score input_p1"
           />
           <input
             list="browsers"
-            type="text"
+            type="number"
             placeholder="ở đây"
             class="input_score input_p2"
           />
           <input
             list="browsers"
-            type="text"
+            type="number"
             placeholder="để"
             class="input_score input_p3"
           />
           <input
             list="browsers"
-            type="text"
+            type="number"
             placeholder="nhập"
             class="input_score input_p4"
           />
           <input
             list="browsers"
-            type="text"
+            type="number"
             placeholder="điểm"
             class="input_score input_p5"
           />
@@ -123,14 +123,26 @@
           <table class="striped highlight centered">
             <tbody class="tbody"></tbody>
           </table>
+          <a class="btn add_responsive waves-effect waves-purple btn-large"
+            >ADD</a
+          >
+          <a class="btn clear_responsive waves-effect waves-red btn-large"
+            >Clear</a
+          >
         </div>
       </div>
 
       <div class="chart_container">
-        <h5>Thống kê</h5>
         <canvas id="myChart" style="width: 100%; max-width: 900px"></canvas>
+        <div class="bg"></div>
         <a class="btn btn_add waves-effect waves-purple btn-large">ADD</a>
-        <a class="btn btn_clr waves-effect waves-purple btn-large">Clear</a>
+        <a class="btn btn_clr waves-effect waves-red btn-large">Clear</a>
+        <a class="btn btn_audio waves-effect waves-red btn-small">:v</a>
+        <audio class="audio" src="./assets/audio.mp3"></audio>
+        <blockquote>
+          Điều may mắn không phải là nắm giữ những lá bài tốt nhất trong tay,
+          may mắn nhất là ta biết khi nào nên đứng lên và về nhà.
+        </blockquote>
       </div>
     </div>
   </body>
