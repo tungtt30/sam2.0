@@ -19,16 +19,16 @@ const res_add = document.querySelector(".add_responsive")
 const res_clr = document.querySelector(".clear_responsive")
 
 let isPlaying = false
-console.log(isPlaying)
+
 btn_audio.addEventListener('click', () => {
     audio.play()
     isPlaying = true
-    console.log(isPlaying)
+    
 })
 
 audio.addEventListener('ended', () => {
     isPlaying = false
-    console.log(isPlaying)
+    
 })
 
 let namearr = ['s1', 's2', 's3', 's4', 's5']
