@@ -2,12 +2,20 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: rgb(57, 4, 107);
+
+  -moz-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }
 
 .body {
   margin-top: 50px;
   justify-content: center;
+  color: rgb(57, 4, 107);
 }
 .game_container {
   width: 500px;
@@ -41,15 +49,40 @@ td {
 
 .btn_add {
   background-color: rgb(255, 255, 255);
-  color: rgb(6, 32, 54);
+  color: rgb(64, 7, 97);
   border: 1px solid;
   border-color: rgb(115, 22, 202);
   margin: 10px;
   border-radius: 4px;
 }
+.bg {
+  position: relative;
+  top: 62px;
+  left: 15px;
+  width: 80px;
+  height: 50px;
+  border-radius: 6px;
+  display: block;
+  animation: pulses 1.2s ease infinite;
+  background: rgba(115, 22, 202, 0.658);
+  box-shadow: 1 1 1 1 rgba(#64208b, 1);
+}
+
+@keyframes pulses {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
 .btn_add:hover {
-  background-color: rgb(227, 172, 243);
-  color: #000000;
+  background-color: rgb(124, 97, 156);
+  color: #ffffff;
 }
 .btn_clr {
   background-color: rgb(247, 247, 247);
@@ -60,7 +93,19 @@ td {
   border-radius: 4px;
 }
 .btn_clr:hover {
-  background-color: rgb(255, 140, 140);
+  background-color: rgb(250, 181, 181);
+  color: #ffffff;
+}
+.btn_audio {
+  background-color: rgb(247, 247, 247);
+  color: rgb(0, 26, 255);
+  border: 1px solid;
+  border-color: rgb(38, 0, 255);
+  margin: 10px;
+  border-radius: 4px;
+}
+.btn_audio:hover {
+  background-color: rgb(8, 8, 170);
   color: #ffffff;
 }
 
@@ -68,12 +113,11 @@ td {
   justify-content: space-between;
 }
 
-
 .name_p1 {
   color: red;
 }
 .name_p2 {
-  color:green;
+  color: green;
 }
 .name_p3 {
   color: violet;
@@ -83,4 +127,44 @@ td {
 }
 .name_p5 {
   color: blue;
+}
+
+.chart_container {
+  width: 450px;
+}
+
+.add_responsive {
+  background-color: rgb(255, 255, 255);
+  color: rgb(64, 7, 97);
+  border: 1px solid;
+  border-color: rgb(115, 22, 202);
+  margin: 10px;
+  border-radius: 4px;
+  display: none;
+}
+
+.clear_responsive {
+  background-color: rgb(247, 247, 247);
+  color: rgb(255, 0, 0);
+  border: 1px solid;
+  border-color: rgb(255, 33, 33);
+  margin: 10px;
+  border-radius: 4px;
+  display: none;
+}
+@media only screen and (max-width: 415px) {
+  .add_responsive {
+    display: block;
+  }
+  .chart_container {
+    display: none;
+  }
+  .clear_responsive {
+    display: block;
+  }
+  .body {
+    position: relative;
+    left: 20px;
+    justify-content: center;
+  }
 }

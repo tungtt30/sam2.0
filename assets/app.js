@@ -12,7 +12,26 @@ const btn_add = document.querySelector('.btn_add')
 const total = document.querySelectorAll('.total')
 const tbody = document.querySelector(".tbody")
 const btn_clr = document.querySelector(".btn_clr")
-let namearr = ['s1','s2','s3','s4','s5']
+const btn_audio = document.querySelector(".btn_audio")
+const audio = document.querySelector(".audio")
+
+const res_add = document.querySelector(".add_responsive")
+const res_clr = document.querySelector(".clear_responsive")
+
+let isPlaying = false
+console.log(isPlaying)
+btn_audio.addEventListener('click', () => {
+    audio.play()
+    isPlaying = true
+    console.log(isPlaying)
+})
+
+audio.addEventListener('ended', () => {
+    isPlaying = false
+    console.log(isPlaying)
+})
+
+let namearr = ['s1', 's2', 's3', 's4', 's5']
 let s = null
 let dataupdate = [0, 0, 0, 0, 0]
 const slot = document.querySelector(".slit")
@@ -155,13 +174,13 @@ const data = {
             'rgba(54, 162, 235, 0.2)',
         ],
         borderColor: [
-           'red',
-           'green',
-           'violet',
-           'orange',
-           'blue'
-          ],
-          borderWidth: 1
+            'red',
+            'green',
+            'violet',
+            'orange',
+            'blue'
+        ],
+        borderWidth: 1
     }]
 };
 const chart = new Chart("myChart", {
@@ -179,7 +198,10 @@ const render = () => {
 render()
 
 btn_clr.addEventListener('click', () => {
-    window.location.reload(true)
+    if (confirm('mất hết dữ liệu đấy !!') == true) {
+        window.location.reload(true)
+    }
+    return
 })
 
 btn_add.addEventListener('click', () => {
@@ -188,6 +210,18 @@ btn_add.addEventListener('click', () => {
     chart.update()
     clearinput()
     render()
+})
+
+res_add.addEventListener('click', () => {
+    push()
+    clearinput()
+    render()
+})
+res_clr.addEventListener('click', () => {
+    if (confirm('mất hết dữ liệu đấy !!') = true) {
+        window.location.reload(true)
+    }
+    return
 })
 
 
