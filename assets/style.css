@@ -168,3 +168,22 @@ td {
     justify-content: center;
   }
 }
+
+.footer {
+  margin: 200px auto 20px auto;
+  text-align: center;
+}
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #c4a5ff;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(62, 41, 85);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(39, 0, 82);
+}
