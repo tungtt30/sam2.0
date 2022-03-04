@@ -1,4 +1,6 @@
 
+
+
 //init selections
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('select');
@@ -196,7 +198,7 @@ res_add.addEventListener('click', () => {
     render()
 })
 res_clr.addEventListener('click', () => {
-    if (confirm('mất hết dữ liệu đấy !!') = true) {
+    if (confirm('mất hết dữ liệu đấy !!') == true) {
         window.location.reload(true)
     }
     return
