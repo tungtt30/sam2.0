@@ -110,8 +110,12 @@ const push = () => {
             pushe()
             totem()
             break;
+        case p1score == p2score == p3score == p4score == p5score == 0:
+            alert("Đm sao ko nhập ?? ")
+            break;
         default:
             alert("Nhập ngu")
+            break;
     }
 }
 const totem = () => {
@@ -201,6 +205,7 @@ res_clr.addEventListener('click', () => {
     if (confirm('mất hết dữ liệu đấy !!') == true) {
         window.location.reload(true)
     }
+
     return
 })
 
