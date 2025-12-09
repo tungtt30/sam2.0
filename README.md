@@ -1,12 +1,10 @@
 # Sâm Lốc Score Calculator
 
-A web application for calculating scores in the Vietnamese card game Sâm Lốc.
-
 ## Overview
 
 ![Sâm Lốc Score Calculator](assets/image.png)
 
-This web app helps players keep track of scores during Sâm Lốc card games. It supports 2-5 players and provides an easy-to-use interface for entering scores and viewing results.
+This web app helps players keep track of scores during Sâm. It supports 2-5 players and provides an easy-to-use interface for entering scores and viewing results.
 
 ## Features
 
@@ -34,8 +32,4 @@ This web app helps players keep track of scores during Sâm Lốc card games. It
 
 ## Installation
 
-No installation required! Simply open the `index.html` file in any modern web browser.
-
-## License
-
-© Copyright 2022, GodSeeker Corporation
+No installation required! Simply open this link `https://tungtt30.github.io/sam2.0/`.
