@@ -173,6 +173,11 @@ td {
   margin: 200px auto 20px auto;
   text-align: center;
 }
+
+/* Hide players based on player count */
+.player-hidden {
+  display: none !important;
+}
 /* custom scroll bar */
 ::-webkit-scrollbar {
   width: 10px;
