@@ -4,6 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          var k = "samTheme";
+          var t = localStorage.getItem(k);
+          var dark =
+            t === "dark"
+              ? true
+              : t === "light"
+                ? false
+                : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.setAttribute(
+            "data-theme",
+            dark ? "dark" : "light"
+          );
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -31,139 +55,168 @@
     <title>Sâm lốc</title>
   </head>
   <body>
-    <div class="body d-flex">
-      <div class="game_container">
-        <div class="init row">
-          <div class="input-field col s4 init_name">
+    <div class="app">
+      <header class="app-header">
+        <div class="app-header__inner">
+          <h1 class="app-title">Sâm lốc</h1>
+          <button
+            type="button"
+            id="themeToggle"
+            class="theme-toggle"
+            aria-pressed="false"
+            aria-label="Toggle dark mode"
+          >
+            <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+              </svg>
+            </span>
+            <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-main body d-flex">
+        <section class="game_container panel">
+          <div class="init row row--flat">
+            <div class="input-field col s4 init_name">
+              <input
+                type="text"
+                id="ip_name"
+                class="input_name flat-input"
+                placeholder="Name?"
+                autocomplete="off"
+              />
+            </div>
+            <div class="input-field col s4">
+              <select class="slit flat-select">
+                <option value="" disabled selected>Pick slot</option>
+                <option value="1">Slot 1</option>
+                <option value="2">Slot 2</option>
+                <option value="3">Slot 3</option>
+                <option value="4">Slot 4</option>
+                <option value="5">Slot 5</option>
+              </select>
+              <label>Slot</label>
+            </div>
+            <div class="input-field col s4">
+              <select id="player_count" class="player_count flat-select">
+                <option value="2">2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4">4 Players</option>
+                <option value="5" selected>5 Players</option>
+              </select>
+              <label>Players</label>
+            </div>
+          </div>
+
+          <div class="p_name">
+            <ul class="collection collection--flat d-flex sp_bw">
+              <li class="collection-item name_p1 name_p player-1">Name</li>
+              <li class="collection-item name_p2 name_p player-2">Name</li>
+              <li class="collection-item name_p3 name_p player-3">Name</li>
+              <li class="collection-item name_p4 name_p player-4">Name</li>
+              <li class="collection-item name_p5 name_p player-5">Name</li>
+            </ul>
+          </div>
+          <div class="p_score">
+            <ul class="collection collection--flat d-flex sp_bw">
+              <li class="collection-item total score_p1 player-1">0</li>
+              <li class="collection-item total score_p2 player-2">0</li>
+              <li class="collection-item total score_p3 player-3">0</li>
+              <li class="collection-item total score_p4 player-4">0</li>
+              <li class="collection-item total score_p5 player-5">0</li>
+            </ul>
+          </div>
+          <div class="score-inputs">
             <input
-              type="text"
-              id="ip_name"
-              class="input_name"
-              placeholder="Name ?"
+              list="browsers"
+              type="number"
+              placeholder="Click"
+              class="input_score input_p1 player-1 flat-input flat-input--score"
             />
+            <input
+              list="browsers"
+              type="number"
+              placeholder="ở đây"
+              class="input_score input_p2 player-2 flat-input flat-input--score"
+            />
+            <input
+              list="browsers"
+              type="number"
+              placeholder="để"
+              class="input_score input_p3 player-3 flat-input flat-input--score"
+            />
+            <input
+              list="browsers"
+              type="number"
+              placeholder="nhập"
+              class="input_score input_p4 player-4 flat-input flat-input--score"
+            />
+            <input
+              list="browsers"
+              type="number"
+              placeholder="điểm"
+              class="input_score input_p5 player-5 flat-input flat-input--score"
+            />
+            <datalist id="browsers">
+              <option value="-1"></option>
+              <option value="-2"></option>
+              <option value="-3"></option>
+              <option value="-4"></option>
+              <option value="-5"></option>
+              <option value="-6"></option>
+              <option value="-7"></option>
+              <option value="-8"></option>
+              <option value="-9"></option>
+              <option value="-10"></option>
+              <option value="-15"></option>
+              <option value="-20"></option>
+            </datalist>
           </div>
-          <div class="input-field col s4">
-            <select class="slit">
-              <option value="" disabled selected>Pick slot</option>
-              <option value="1">Slot 1</option>
-              <option value="2">Slot 2</option>
-              <option value="3">Slot 3</option>
-              <option value="4">Slot 4</option>
-              <option value="5">Slot 5</option>
-            </select>
-            <label>Slot</label>
+          <div class="score_table">
+            <div class="table-wrap">
+              <table class="score-table">
+                <tbody class="tbody"></tbody>
+              </table>
+            </div>
+            <div class="btn-row btn-row--responsive">
+              <a href="#!" class="btn-flat btn-primary add_responsive">ADD</a>
+              <a href="#!" class="btn-flat btn-danger clear_responsive">Clear</a>
+            </div>
           </div>
-          <div class="input-field col s4">
-            <select id="player_count" class="player_count">
-              <option value="2">2 Players</option>
-              <option value="3">3 Players</option>
-              <option value="4">4 Players</option>
-              <option value="5" selected>5 Players</option>
-            </select>
-            <label>Players</label>
-          </div>
-        </div>
+        </section>
 
-        <div class="p_name">
-          <ul class="collection d-flex sp_bw">
-            <li class="collection-item name_p1 name_p player-1">Name</li>
-            <li class="collection-item name_p2 name_p player-2">Name</li>
-            <li class="collection-item name_p3 name_p player-3">Name</li>
-            <li class="collection-item name_p4 name_p player-4">Name</li>
-            <li class="collection-item name_p5 name_p player-5">Name</li>
-          </ul>
-        </div>
-        <div class="p_score">
-          <ul class="collection d-flex sp_bw">
-            <li class="collection-item total score_p1 player-1">0</li>
-            <li class="collection-item total score_p2 player-2">0</li>
-            <li class="collection-item total score_p3 player-3">0</li>
-            <li class="collection-item total score_p4 player-4">0</li>
-            <li class="collection-item total score_p5 player-5">0</li>
-          </ul>
-        </div>
-        <div class="d-flex justi-ar">
-          <input
-            list="browsers"
-            type="number"
-            placeholder="Click"
-            class="input_score input_p1 player-1"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="ở đây"
-            class="input_score input_p2 player-2"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="để"
-            class="input_score input_p3 player-3"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="nhập"
-            class="input_score input_p4 player-4"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="điểm"
-            class="input_score input_p5 player-5"
-          />
-          <datalist id="browsers">
-            <option value="-1"></option>
-            <option value="-2"></option>
-            <option value="-3"></option>
-            <option value="-4"></option>
-            <option value="-5"></option>
-            <option value="-6"></option>
-            <option value="-7"></option>
-            <option value="-8"></option>
-            <option value="-9"></option>
-            <option value="-10"></option>
-            <option value="-15"></option>
-            <option value="-20"></option>
-          </datalist>
-        </div>
-        <div class="score_table">
-          <table class="striped highlight centered">
-            <tbody class="tbody"></tbody>
-          </table>
-          <a class="btn add_responsive waves-effect waves-purple btn-large"
-            >ADD</a
-          >
-          <a class="btn clear_responsive waves-effect waves-red btn-large"
-            >Clear</a
-          >
-        </div>
-      </div>
+        <section class="chart_container panel">
+          <div class="chart-wrap">
+            <canvas id="myChart" class="chart-canvas"></canvas>
+          </div>
+          <div class="btn-row">
+            <div class="btn-add-slot">
+              <div class="bg" aria-hidden="true"></div>
+              <a href="#!" class="btn-flat btn-primary btn_add">ADD</a>
+            </div>
+            <a href="#!" class="btn-flat btn-danger btn_clr">Clear</a>
+            <a href="#!" class="btn-flat btn-ghost btn_audio">:v</a>
+          </div>
+          <audio class="audio" src="./assets/audio.mp3"></audio>
+          <blockquote class="quote">
+            Điều may mắn không phải là nắm giữ những lá bài tốt nhất trong tay,
+            may mắn nhất là ta biết khi nào nên đứng lên và về nhà.
+          </blockquote>
+        </section>
+      </main>
 
-      <div class="chart_container">
-        <canvas id="myChart" style="width: 100%; max-width: 900px"></canvas>
-        <div class="bg"></div>
-        <a class="btn btn_add waves-effect waves-purple btn-large">ADD</a>
-        <a class="btn btn_clr waves-effect waves-red btn-large">Clear</a>
-        <a class="btn btn_audio waves-effect waves-red btn-small">:v</a>
-        <audio class="audio" src="./assets/audio.mp3"></audio>
-        <blockquote>
-          Điều may mắn không phải là nắm giữ những lá bài tốt nhất trong tay,
-          may mắn nhất là ta biết khi nào nên đứng lên và về nhà.
-        </blockquote>
-      </div>
+      <footer class="footer">
+        <small>&copy; Copyright 2022, GodSeeker Corporation</small>
+      </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./assets/app.js"></script>
   </body>
-  <footer class="footer">
-    <small>&copy; GodSeeker</small>
-  </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <!-- <script src="./assets/app.ob.js"></script> -->
-  <script src="./assets/app.js"></script>
-  <script type="text/javascript">
-    window.onbeforeunload = function () {
-      return "Dude, are you sure you want to leave? Think of the kittens!";
-    };
-  </script>
 </html>
