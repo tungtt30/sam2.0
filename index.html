@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -22,148 +22,236 @@
       href="./assets/favicon/favicon-16x16.png"
     />
     <link rel="manifest" href="./assets/favicon/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <title>Sâm lốc</title>
+    <title>Sâm Lốc - Score Tracker</title>
   </head>
   <body>
-    <div class="body d-flex">
-      <div class="game_container">
-        <div class="init row">
-          <div class="input-field col s4 init_name">
-            <input
-              type="text"
-              id="ip_name"
-              class="input_name"
-              placeholder="Name ?"
-            />
-          </div>
-          <div class="input-field col s4">
-            <select class="slit">
-              <option value="" disabled selected>Pick slot</option>
-              <option value="1">Slot 1</option>
-              <option value="2">Slot 2</option>
-              <option value="3">Slot 3</option>
-              <option value="4">Slot 4</option>
-              <option value="5">Slot 5</option>
-            </select>
-            <label>Slot</label>
-          </div>
-          <div class="input-field col s4">
-            <select id="player_count" class="player_count">
-              <option value="2">2 Players</option>
-              <option value="3">3 Players</option>
-              <option value="4">4 Players</option>
-              <option value="5" selected>5 Players</option>
-            </select>
-            <label>Players</label>
-          </div>
-        </div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
-        <div class="p_name">
-          <ul class="collection d-flex sp_bw">
-            <li class="collection-item name_p1 name_p player-1">Name</li>
-            <li class="collection-item name_p2 name_p player-2">Name</li>
-            <li class="collection-item name_p3 name_p player-3">Name</li>
-            <li class="collection-item name_p4 name_p player-4">Name</li>
-            <li class="collection-item name_p5 name_p player-5">Name</li>
-          </ul>
+    <!-- Confirm Modal -->
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-card">
+        <div class="modal-icon">⚠️</div>
+        <h3 class="modal-title">Xác nhận xóa?</h3>
+        <p class="modal-text">Tất cả dữ liệu sẽ bị xóa vĩnh viễn. Bạn có chắc chắn?</p>
+        <div class="modal-actions">
+          <button class="btn btn-cancel" id="modalCancel">Hủy</button>
+          <button class="btn btn-danger" id="modalConfirm">Xóa tất cả</button>
         </div>
-        <div class="p_score">
-          <ul class="collection d-flex sp_bw">
-            <li class="collection-item total score_p1 player-1">0</li>
-            <li class="collection-item total score_p2 player-2">0</li>
-            <li class="collection-item total score_p3 player-3">0</li>
-            <li class="collection-item total score_p4 player-4">0</li>
-            <li class="collection-item total score_p5 player-5">0</li>
-          </ul>
-        </div>
-        <div class="d-flex justi-ar">
-          <input
-            list="browsers"
-            type="number"
-            placeholder="Click"
-            class="input_score input_p1 player-1"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="ở đây"
-            class="input_score input_p2 player-2"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="để"
-            class="input_score input_p3 player-3"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="nhập"
-            class="input_score input_p4 player-4"
-          />
-          <input
-            list="browsers"
-            type="number"
-            placeholder="điểm"
-            class="input_score input_p5 player-5"
-          />
-          <datalist id="browsers">
-            <option value="-1"></option>
-            <option value="-2"></option>
-            <option value="-3"></option>
-            <option value="-4"></option>
-            <option value="-5"></option>
-            <option value="-6"></option>
-            <option value="-7"></option>
-            <option value="-8"></option>
-            <option value="-9"></option>
-            <option value="-10"></option>
-            <option value="-15"></option>
-            <option value="-20"></option>
-          </datalist>
-        </div>
-        <div class="score_table">
-          <table class="striped highlight centered">
-            <tbody class="tbody"></tbody>
-          </table>
-          <a class="btn add_responsive waves-effect waves-purple btn-large"
-            >ADD</a
-          >
-          <a class="btn clear_responsive waves-effect waves-red btn-large"
-            >Clear</a
-          >
-        </div>
-      </div>
-
-      <div class="chart_container">
-        <canvas id="myChart" style="width: 100%; max-width: 900px"></canvas>
-        <div class="bg"></div>
-        <a class="btn btn_add waves-effect waves-purple btn-large">ADD</a>
-        <a class="btn btn_clr waves-effect waves-red btn-large">Clear</a>
-        <a class="btn btn_audio waves-effect waves-red btn-small">:v</a>
-        <audio class="audio" src="./assets/audio.mp3"></audio>
-        <blockquote>
-          Điều may mắn không phải là nắm giữ những lá bài tốt nhất trong tay,
-          may mắn nhất là ta biết khi nào nên đứng lên và về nhà.
-        </blockquote>
       </div>
     </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">🂡</span>
+          <h1 class="logo-title">Sâm Lốc</h1>
+          <span class="logo-icon logo-icon-right">🂱</span>
+        </div>
+        <p class="header-subtitle">Máy Tính Điểm Thông Minh</p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <!-- Setup Panel -->
+        <div class="card setup-card">
+          <div class="card-header">
+            <h2 class="card-title">⚙️ Thiết Lập</h2>
+          </div>
+          <div class="card-body">
+            <div class="setup-grid">
+              <div class="setup-field">
+                <label class="setup-label" for="player_count">Số người chơi</label>
+                <div class="player-count-toggles" id="playerCountToggles">
+                  <button class="count-toggle" data-count="2">2</button>
+                  <button class="count-toggle" data-count="3">3</button>
+                  <button class="count-toggle" data-count="4">4</button>
+                  <button class="count-toggle active" data-count="5">5</button>
+                </div>
+              </div>
+              <div class="setup-field">
+                <label class="setup-label" for="slotSelect">Chọn vị trí</label>
+                <select class="slot-select" id="slotSelect">
+                  <option value="" disabled selected>Pick slot</option>
+                  <option value="1">Slot 1</option>
+                  <option value="2">Slot 2</option>
+                  <option value="3">Slot 3</option>
+                  <option value="4">Slot 4</option>
+                  <option value="5">Slot 5</option>
+                </select>
+              </div>
+              <div class="setup-field">
+                <label class="setup-label" for="ip_name">Tên người chơi</label>
+                <input
+                  type="text"
+                  id="ip_name"
+                  class="name-input"
+                  placeholder="Nhập tên..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Players Panel -->
+        <div class="card players-card">
+          <div class="card-header">
+            <h2 class="card-title">👥 Người Chơi</h2>
+          </div>
+          <div class="card-body">
+            <div class="players-row" id="playersRow">
+              <!-- Player 1 -->
+              <div class="player-chip player-1">
+                <div class="player-avatar">P1</div>
+                <div class="player-info">
+                  <span class="player-name name_p name_p1">Player 1</span>
+                  <span class="player-score total score_p1">0</span>
+                </div>
+              </div>
+              <!-- Player 2 -->
+              <div class="player-chip player-2">
+                <div class="player-avatar">P2</div>
+                <div class="player-info">
+                  <span class="player-name name_p name_p2">Player 2</span>
+                  <span class="player-score total score_p2">0</span>
+                </div>
+              </div>
+              <!-- Player 3 -->
+              <div class="player-chip player-3">
+                <div class="player-avatar">P3</div>
+                <div class="player-info">
+                  <span class="player-name name_p name_p3">Player 3</span>
+                  <span class="player-score total score_p3">0</span>
+                </div>
+              </div>
+              <!-- Player 4 -->
+              <div class="player-chip player-4">
+                <div class="player-avatar">P4</div>
+                <div class="player-info">
+                  <span class="player-name name_p name_p4">Player 4</span>
+                  <span class="player-score total score_p4">0</span>
+                </div>
+              </div>
+              <!-- Player 5 -->
+              <div class="player-chip player-5">
+                <div class="player-avatar">P5</div>
+                <div class="player-info">
+                  <span class="player-name name_p name_p5">Player 5</span>
+                  <span class="player-score total score_p5">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Input Panel -->
+        <div class="card input-card">
+          <div class="card-header">
+            <h2 class="card-title">🎯 Nhập Điểm Ván</h2>
+          </div>
+          <div class="card-body">
+            <div class="input-row" id="inputRow">
+              <div class="input-group input_p1 player-1">
+                <label class="input-label">P1</label>
+                <input type="number" class="score-input input_score" placeholder="-" />
+              </div>
+              <div class="input-group input_p2 player-2">
+                <label class="input-label">P2</label>
+                <input type="number" class="score-input input_score" placeholder="-" />
+              </div>
+              <div class="input-group input_p3 player-3">
+                <label class="input-label">P3</label>
+                <input type="number" class="score-input input_score" placeholder="-" />
+              </div>
+              <div class="input-group input_p4 player-4">
+                <label class="input-label">P4</label>
+                <input type="number" class="score-input input_score" placeholder="-" />
+              </div>
+              <div class="input-group input_p5 player-5">
+                <label class="input-label">P5</label>
+                <input type="number" class="score-input input_score" placeholder="-" />
+              </div>
+            </div>
+            <div class="quick-actions">
+              <span class="quick-hint">Điểm nhanh:</span>
+              <button class="quick-btn" data-val="-1">-1</button>
+              <button class="quick-btn" data-val="-2">-2</button>
+              <button class="quick-btn" data-val="-3">-3</button>
+              <button class="quick-btn" data-val="-4">-4</button>
+              <button class="quick-btn" data-val="-5">-5</button>
+              <button class="quick-btn" data-val="-8">-8</button>
+              <button class="quick-btn" data-val="-10">-10</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-add" id="btnAdd">
+                <span class="btn-icon">➕</span> Thêm Ván
+              </button>
+              <button class="btn btn-clear" id="btnClear">
+                <span class="btn-icon">🗑️</span> Xóa Dữ Liệu
+              </button>
+              <button class="btn btn-audio" id="btnAudio">
+                <span class="btn-icon">🔇</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Table Panel -->
+        <div class="card table-card">
+          <div class="card-header">
+            <h2 class="card-title">📋 Lịch Sử Ván Đấu</h2>
+            <span class="round-count" id="roundCount">0 ván</span>
+          </div>
+          <div class="card-body table-wrapper">
+            <table class="score-table" id="scoreTable">
+              <thead id="tableHead"></thead>
+              <tbody class="tbody" id="tableBody"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState">
+              <span class="empty-icon">🃏</span>
+              <p>Chưa có ván nào được ghi. Hãy nhập điểm và thêm ván đầu tiên!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Panel -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Biểu Đồ Điểm</h2>
+          </div>
+          <div class="card-body chart-wrapper">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <p>&copy; <span id="currentYear"></span> GodSeeker — Sâm Lốc Score Tracker</p>
+      </div>
+    </footer>
+
+    <!-- Audio -->
+    <audio class="audio" src="./assets/audio.mp3"></audio>
+
+    <script src="./assets/app.js"></script>
+    <script>
+      window.onbeforeunload = function () {
+        return "Bạn có chắc muốn rời đi? Dữ liệu có thể chưa được lưu!";
+      };
+    </script>
   </body>
-  <footer class="footer">
-    <small>&copy; GodSeeker</small>
-  </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <!-- <script src="./assets/app.ob.js"></script> -->
-  <script src="./assets/app.js"></script>
-  <script type="text/javascript">
-    window.onbeforeunload = function () {
-      return "Dude, are you sure you want to leave? Think of the kittens!";
-    };
-  </script>
 </html>
