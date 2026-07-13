@@ -1,8 +1,8 @@
-# Sâm Lốc Score Calculator
+# Sâm Score Calculator
 
 ## Overview
 
-![Sâm Lốc Score Calculator](assets/image.png)
+![Sâm Score Calculator](assets/image.png)
 
 This web app helps players keep track of scores during Sâm. It supports 2-5 players and provides an easy-to-use interface for entering scores and viewing results.
 
