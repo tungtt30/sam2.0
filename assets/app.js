@@ -23,6 +23,7 @@ const modalConfirm = document.getElementById('modalConfirm');
 const emptyState = document.getElementById('emptyState');
 const roundCount = document.getElementById('roundCount');
 const currentYearSpan = document.getElementById('currentYear');
+const themeToggle = document.getElementById('themeToggle');
 
 // --- Constants ---
 let PLAYER_COUNT = 5;
@@ -115,6 +116,40 @@ audio.addEventListener('ended', () => {
   isPlaying = false;
   btn_audio.innerHTML = '<span class="btn-icon">🔇</span>';
 });
+
+// --- Theme System ---
+const themeKey = 'samlokTheme';
+let chartReady = false;
+let currentTheme = 'dark';
+function applyTheme(theme) {
+  currentTheme = theme;
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (themeToggle) themeToggle.textContent = '☀️';
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    if (themeToggle) themeToggle.textContent = '🌙';
+  }
+  // Refresh chart colors to match theme (only once the chart exists)
+  if (chartReady && typeof chart !== 'undefined') {
+    const tickColor = theme === 'light' ? '#7a7364' : '#c4b99a';
+    chart.options.scales.xAxes[0].ticks.fontColor = tickColor;
+    chart.options.scales.yAxes[0].ticks.fontColor = tickColor;
+    chart.options.tooltips.backgroundColor = theme === 'light' ? 'rgba(255,255,255,0.95)' : 'rgba(26, 51, 41, 0.95)';
+    chart.options.tooltips.titleFontColor = theme === 'light' ? '#b8922e' : '#d4a843';
+    chart.options.tooltips.bodyFontColor = theme === 'light' ? '#23291f' : '#e8e0d0';
+    chart.update();
+  }
+}
+
+if (themeToggle) {
+  applyTheme(window.localStorage.getItem(themeKey) || 'dark');
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    window.localStorage.setItem(themeKey, next);
+  });
+}
 
 // --- Player Count Toggles ---
 playerCountToggles.addEventListener('click', (e) => {
@@ -300,6 +335,10 @@ const chart = new Chart('myChart', {
   },
 });
 
+chartReady = true;
+// Apply saved theme colors to the chart now that it exists
+applyTheme(currentTheme);
+
 function updateChartData() {
   data.labels = namearr.slice(0, PLAYER_COUNT);
   data.datasets[0].data = dataupdate.slice(0, PLAYER_COUNT);
@@ -415,10 +454,37 @@ function push() {
   if (input_score[0]) input_score[0].focus();
 }
 
+// --- Animated count-up ---
+function animateValue(el, start, end, duration = 600) {
+  const obj = el;
+  if (obj._animFrame) cancelAnimationFrame(obj._animFrame);
+  const startTime = performance.now();
+  function step(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (end - start) * eased);
+    obj.textContent = current;
+    if (progress < 1) {
+      obj._animFrame = requestAnimationFrame(step);
+    } else {
+      obj.textContent = end;
+    }
+  }
+  obj._animFrame = requestAnimationFrame(step);
+}
+
 function updateTotals() {
+  let maxTotal = -Infinity;
   for (let i = 0; i < PLAYER_COUNT; i++) {
     const playerTotal = players[i].reduce((a, b) => a + b, 0);
-    total[i].textContent = playerTotal;
+    dataupdate[i] = playerTotal;
+    if (playerTotal > maxTotal) maxTotal = playerTotal;
+  }
+
+  for (let i = 0; i < PLAYER_COUNT; i++) {
+    const playerTotal = dataupdate[i];
+    const prev = parseInt(total[i].textContent) || 0;
+    animateValue(total[i], prev, playerTotal);
 
     // Color based on value
     if (playerTotal > 0) {
@@ -428,8 +494,26 @@ function updateTotals() {
     } else {
       total[i].style.color = '';
     }
+  }
 
-    dataupdate[i] = playerTotal;
+  updateLeader(maxTotal);
+}
+
+// --- Leader crown badge ---
+function updateLeader(maxTotal) {
+  for (let i = 1; i <= 5; i++) {
+    const chip = document.querySelector(`.player-chip.player-${i}`);
+    if (chip) chip.classList.remove('is-leader');
+  }
+  if (maxTotal === -Infinity || maxTotal <= 0) return;
+  for (let i = 0; i < PLAYER_COUNT; i++) {
+    if (dataupdate[i] === maxTotal) {
+      const chip = document.querySelector(`.player-chip.player-${i + 1}`);
+      if (chip && !chip.classList.contains('player-hidden')) {
+        chip.classList.add('is-leader');
+      }
+      break;
+    }
   }
 }
 
@@ -553,6 +637,25 @@ window.addEventListener('beforeunload', () => {
   store();
 });
 
+// --- Scroll Reveal ---
+function setupReveal() {
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(c => c.classList.add('reveal'));
+  if (!('IntersectionObserver' in window)) {
+    cards.forEach(c => c.classList.add('visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(c => observer.observe(c));
+}
+
 // --- Initialize ---
 function init() {
   getStore();
@@ -568,6 +671,7 @@ function init() {
     // Already handled by updateEmptyState called via render -> but updateTableHeader calls render before tr might be populated
   }
   updateEmptyState();
+  setupReveal();
 
   // Update total display colors
   for (let i = 0; i < 5; i++) {
