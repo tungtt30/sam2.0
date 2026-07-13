@@ -137,6 +137,25 @@ body::after {
   50% { transform: translate(30px, 40px) scale(1.1); }
 }
 
+/* Touch primitives: kill tap highlight, use GPU tap, suppress callout */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation; /* prevents 300ms delay & double-tap zoom */
+}
+
+/* Remove sticky :hover states on touch devices (only on actual hover-capable devices) */
+@media (hover: hover) and (pointer: fine) {
+  .count-toggle:hover,
+  .quick-btn:hover,
+  .btn:hover,
+  .player-chip:hover,
+  .theme-toggle:hover,
+  .card:hover {
+    /* hover rules live elsewhere; this guard ensures they don't apply on touch */
+  }
+}
+
 /* Disable text selection */
 body {
   -moz-user-select: none !important;
@@ -145,6 +164,14 @@ body {
   -khtml-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+}
+
+/* Inputs must allow selection for editing */
+input,
+select,
+textarea {
+  -webkit-user-select: text !important;
+  user-select: text !important;
 }
 
 /* --- Custom Scrollbar --- */
@@ -168,7 +195,7 @@ body {
 
 /* --- Header --- */
 .header {
-  padding: 26px 20px 18px;
+  padding: calc(26px + env(safe-area-inset-top, 0px)) 20px 18px;
   text-align: center;
   border-bottom: 1px solid var(--color-border);
   background: linear-gradient(180deg, var(--color-surface-solid) 0%, rgba(13, 27, 20, 0.4) 100%);
@@ -261,11 +288,13 @@ body {
   backdrop-filter: blur(8px);
   transition: all var(--transition);
 }
-.theme-toggle:hover {
-  background: var(--color-gold);
-  color: var(--color-bg);
-  box-shadow: var(--shadow-gold);
-  transform: translateY(-50%) rotate(20deg) scale(1.05);
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    background: var(--color-gold);
+    color: var(--color-bg);
+    box-shadow: var(--shadow-gold);
+    transform: translateY(-50%) rotate(20deg) scale(1.05);
+  }
 }
 
 /* --- Main Container --- */
@@ -309,10 +338,12 @@ body {
   opacity: 0.8;
 }
 
-.card:hover {
-  border-color: var(--color-border-light);
-  box-shadow: var(--shadow-card), var(--shadow-gold);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    border-color: var(--color-border-light);
+    box-shadow: var(--shadow-card), var(--shadow-gold);
+    transform: translateY(-2px);
+  }
 }
 
 .card-header {
@@ -397,10 +428,12 @@ body {
   background: #fff;
 }
 
-.count-toggle:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .count-toggle:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    transform: translateY(-2px);
+  }
 }
 
 .count-toggle.active {
@@ -496,10 +529,12 @@ body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.player-chip:hover {
-  transform: translateY(-3px);
-  border-color: var(--color-border-light);
-  box-shadow: var(--shadow-button);
+@media (hover: hover) and (pointer: fine) {
+  .player-chip:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-border-light);
+    box-shadow: var(--shadow-button);
+  }
 }
 
 .player-chip:nth-child(1) { animation-delay: 0.05s; }
@@ -697,12 +732,14 @@ body {
   background: #fff;
 }
 
-.quick-btn:hover {
-  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
-  color: #fff;
-  border-color: var(--color-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .quick-btn:hover {
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+    color: #fff;
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3);
+  }
 }
 
 /* --- Buttons --- */
@@ -763,10 +800,12 @@ body {
   border: 1px solid var(--color-gold);
 }
 
-.btn-add:hover {
-  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
-  box-shadow: 0 8px 24px rgba(212, 168, 67, 0.4);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-add:hover {
+    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+    box-shadow: 0 8px 24px rgba(212, 168, 67, 0.4);
+    transform: translateY(-2px);
+  }
 }
 
 .btn-clear {
@@ -775,11 +814,13 @@ body {
   border: 1px solid var(--color-red);
 }
 
-.btn-clear:hover {
-  background: var(--color-red);
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(192, 57, 43, 0.4);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-clear:hover {
+    background: var(--color-red);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(192, 57, 43, 0.4);
+    transform: translateY(-2px);
+  }
 }
 
 .btn-audio {
@@ -1079,7 +1120,7 @@ body {
 /* --- Footer --- */
 .footer {
   text-align: center;
-  padding: 22px;
+  padding: 22px 22px calc(22px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);
   backdrop-filter: blur(8px);
@@ -1102,8 +1143,80 @@ body {
   transform: translateY(0);
 }
 
+/* --- Mobile Sticky Action Bar (thumb-reachable) --- */
+.mobile-actionbar {
+  display: none; /* hidden on desktop */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 120;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  gap: 10px;
+  grid-template-columns: 2fr 1fr 1fr;
+  background: linear-gradient(0deg, var(--color-surface-solid) 0%, rgba(13, 27, 20, 0.85) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme='light'] .mobile-actionbar {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 247, 240, 0.9) 100%);
+}
+
+.mob-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px; /* comfortable thumb target */
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.mob-action:active {
+  transform: scale(0.96);
+}
+.mob-action-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.mob-add {
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  color: var(--color-bg);
+  border-color: var(--color-gold);
+  box-shadow: 0 4px 14px rgba(212, 168, 67, 0.35);
+}
+.mob-clear {
+  border-color: rgba(231, 76, 60, 0.5);
+  color: var(--color-red-light);
+}
+.mob-audio.is-muted .mob-action-icon {
+  opacity: 0.6;
+}
+
 /* --- Responsive --- */
 @media (max-width: 768px) {
+  .mobile-actionbar {
+    display: grid;
+  }
+
+  .main {
+    /* make room for the fixed action bar */
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer {
+    display: none; /* avoid overlap with the fixed mobile action bar */
+  }
   .container {
     grid-template-columns: 1fr;
   }
@@ -1208,8 +1321,9 @@ body {
   }
 
   .quick-btn {
-    padding: 4px 8px;
-    font-size: 0.7rem;
+    padding: 8px 10px; /* keep >=40px tap target for fingers */
+    font-size: 0.8rem;
+    min-width: 40px;
   }
 }
 

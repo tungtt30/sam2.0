@@ -100,21 +100,29 @@ function showConfirmModal(onConfirm) {
 }
 
 // --- Audio Control ---
-btn_audio.addEventListener('click', () => {
+function toggleAudio() {
   if (isPlaying) {
     audio.pause();
     isPlaying = false;
     btn_audio.innerHTML = '<span class="btn-icon">🔇</span>';
+    mobAudio.classList.add('is-muted');
+    mobAudio.querySelector('.mob-action-icon').textContent = '🔇';
   } else {
     audio.play();
     isPlaying = true;
     btn_audio.innerHTML = '<span class="btn-icon">🔊</span>';
+    mobAudio.classList.remove('is-muted');
+    mobAudio.querySelector('.mob-action-icon').textContent = '🔊';
   }
-});
+}
+
+btn_audio.addEventListener('click', toggleAudio);
 
 audio.addEventListener('ended', () => {
   isPlaying = false;
   btn_audio.innerHTML = '<span class="btn-icon">🔇</span>';
+  mobAudio.classList.add('is-muted');
+  mobAudio.querySelector('.mob-action-icon').textContent = '🔇';
 });
 
 // --- Theme System ---
@@ -450,8 +458,10 @@ function push() {
   updateEmptyState();
   clearinput();
 
-  // Focus first input
-  if (input_score[0]) input_score[0].focus();
+  // Focus first input on non-touch devices only (avoids forcing the
+  // mobile keyboard open after every round)
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (!isTouch && input_score[0]) input_score[0].focus();
 }
 
 // --- Animated count-up ---
@@ -615,6 +625,31 @@ btn_clr.addEventListener('click', () => {
     window.location.reload();
   });
 });
+
+// --- Mobile Sticky Action Bar (thumb-reachable on phones) ---
+const mobAdd = document.getElementById('mobAdd');
+const mobClear = document.getElementById('mobClear');
+const mobAudio = document.getElementById('mobAudio');
+
+function addRound() {
+  if (navigator.vibrate) navigator.vibrate(15); // subtle haptic tap
+  push();
+  if (typeof updateChartData === 'function') updateChartData();
+  if (typeof chart !== 'undefined' && chart) chart.update();
+  render();
+  store();
+}
+
+if (mobAdd) mobAdd.addEventListener('click', addRound);
+if (mobClear) {
+  mobClear.addEventListener('click', () => {
+    showConfirmModal(() => {
+      window.localStorage.removeItem(key);
+      window.location.reload();
+    });
+  });
+}
+if (mobAudio) mobAudio.addEventListener('click', toggleAudio);
 
 // --- Enter key to submit ---
 document.addEventListener('keydown', (e) => {
