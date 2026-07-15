@@ -24,11 +24,14 @@ const emptyState = document.getElementById('emptyState');
 const roundCount = document.getElementById('roundCount');
 const currentYearSpan = document.getElementById('currentYear');
 const themeToggle = document.getElementById('themeToggle');
+const autoSubmitToggle = document.getElementById('autoSubmitToggle');
 
 // --- Constants ---
 let PLAYER_COUNT = 5;
 let isPlaying = false;
 let s = null;
+let autoSubmit = false;
+const autoSubmitKey = 'samlokAutoSubmit';
 
 // Player data
 let namearr = ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5'];
@@ -227,6 +230,7 @@ document.querySelector('.quick-actions').addEventListener('click', (e) => {
   if (lastFocusedScoreInput && !lastFocusedScoreInput.classList.contains('player-hidden')) {
     lastFocusedScoreInput.value = val;
     lastFocusedScoreInput.focus();
+    checkAutoSubmit();
     return;
   }
 
@@ -237,6 +241,7 @@ document.querySelector('.quick-actions').addEventListener('click', (e) => {
     if (!inp.value || inp.value === '0') {
       inp.value = val;
       inp.focus();
+      checkAutoSubmit();
       return;
     }
   }
@@ -610,14 +615,17 @@ function getStore() {
   }
 }
 
-// --- Event Listeners ---
-btn_add.addEventListener('click', () => {
+// --- Submit Round (reused by button, Enter key, mobile bar & auto-submit) ---
+function submitRound() {
   push();
   updateChartData();
   chart.update();
   render();
   store();
-});
+}
+
+// --- Event Listeners ---
+btn_add.addEventListener('click', submitRound);
 
 btn_clr.addEventListener('click', () => {
   showConfirmModal(() => {
@@ -633,11 +641,7 @@ const mobAudio = document.getElementById('mobAudio');
 
 function addRound() {
   if (navigator.vibrate) navigator.vibrate(15); // subtle haptic tap
-  push();
-  if (typeof updateChartData === 'function') updateChartData();
-  if (typeof chart !== 'undefined' && chart) chart.update();
-  render();
-  store();
+  submitRound();
 }
 
 if (mobAdd) mobAdd.addEventListener('click', addRound);
@@ -651,6 +655,54 @@ if (mobClear) {
 }
 if (mobAudio) mobAudio.addEventListener('click', toggleAudio);
 
+// --- Auto-submit toggle ---
+function saveAutoSubmit() {
+  window.localStorage.setItem(autoSubmitKey, autoSubmit ? '1' : '0');
+}
+
+function loadAutoSubmit() {
+  autoSubmit = window.localStorage.getItem(autoSubmitKey) === '1';
+  if (autoSubmitToggle) autoSubmitToggle.checked = autoSubmit;
+}
+
+if (autoSubmitToggle) {
+  autoSubmitToggle.addEventListener('change', () => {
+    autoSubmit = autoSubmitToggle.checked;
+    saveAutoSubmit();
+    if (autoSubmit) {
+      checkAutoSubmit();
+    }
+  });
+}
+
+// Returns true if exactly one visible score input is empty
+// (meaning every other player already has a value entered)
+function exactlyOneEmptyInput() {
+  let emptyCount = 0;
+  for (let i = 0; i < PLAYER_COUNT; i++) {
+    const inp = input_score[i];
+    if (!inp || inp.classList.contains('player-hidden')) continue;
+    if (inp.value.trim() === '') emptyCount++;
+  }
+  // Auto-submit only when exactly one visible input remains empty
+  // (i.e. every other player already has a value entered).
+  return emptyCount === 1;
+}
+
+// Trigger auto-submit when the last necessary score is entered
+function checkAutoSubmit() {
+  if (!autoSubmit) return;
+  if (exactlyOneEmptyInput()) {
+    submitRound();
+  }
+}
+
+// Listen on each score input: when auto-submit is on and only one
+// input is left empty, automatically record the round.
+input_score.forEach((input) => {
+  input.addEventListener('input', checkAutoSubmit);
+});
+
 // --- Enter key to submit ---
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -658,11 +710,7 @@ document.addEventListener('keydown', (e) => {
     // Check if we're in a score input
     if (activeEl && activeEl.classList.contains('input_score')) {
       e.preventDefault();
-      push();
-      updateChartData();
-      chart.update();
-      render();
-      store();
+      submitRound();
     }
   }
 });
@@ -694,6 +742,7 @@ function setupReveal() {
 // --- Initialize ---
 function init() {
   getStore();
+  loadAutoSubmit();
   updatePlayerVisibility();
   updateSlotOptions();
   updateTableHeader();

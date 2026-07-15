@@ -742,6 +742,94 @@ textarea {
   }
 }
 
+/* --- Auto-submit toggle (inline, left of Thêm Ván) --- */
+.switch-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 0 14px;
+  height: 46px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-solid);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Group holding the 3 action buttons, centered as a unit */
+.btn-actions {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+:root[data-theme='light'] .switch-inline {
+  background: #fff;
+}
+
+.switch-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 30px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 30px;
+  transition: all var(--transition);
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-text-muted);
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.switch input:checked + .switch-slider {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  border-color: var(--color-gold);
+}
+
+.switch input:checked + .switch-slider::before {
+  transform: translate(22px, -50%);
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.switch input:focus-visible + .switch-slider {
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.25);
+}
+
 /* --- Buttons --- */
 .btn {
   display: inline-flex;
@@ -1276,12 +1364,26 @@ textarea {
   }
 
   .btn-row {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .switch-inline {
+    flex: 0 0 auto;
+  }
+
+  .btn-actions {
+    flex: 1 1 auto;
+    justify-content: center;
+    gap: 10px;
   }
 
   .btn {
     justify-content: center;
+    flex: 0 1 auto;
   }
 
   .card-body {
