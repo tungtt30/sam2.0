@@ -37,7 +37,6 @@ const autoSubmitKey = 'samlokAutoSubmit';
 let namearr = ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5'];
 let dataupdate = [0, 0, 0, 0, 0];
 let players = [[], [], [], [], []];
-const tr = [];
 
 // --- Set current year ---
 if (currentYearSpan) {
@@ -71,8 +70,20 @@ function showToast(message, type = 'error') {
 }
 
 // --- Modal System ---
-function showConfirmModal(onConfirm) {
+function showConfirmModal(onConfirm, opts = {}) {
   confirmModal.classList.add('active');
+
+  const defaults = {
+    title: 'Xác nhận xóa?',
+    text: 'Tất cả dữ liệu sẽ bị xóa vĩnh viễn. Bạn có chắc chắn?',
+    confirmLabel: 'Xóa tất cả',
+  };
+
+  const titleEl = confirmModal.querySelector('.modal-title');
+  const textEl = confirmModal.querySelector('.modal-text');
+  if (titleEl) titleEl.textContent = opts.title || defaults.title;
+  if (textEl) textEl.textContent = opts.text || defaults.text;
+  modalConfirm.textContent = opts.confirmLabel || defaults.confirmLabel;
 
   const handleConfirm = () => {
     confirmModal.classList.remove('active');
@@ -274,11 +285,11 @@ function updateSlotOptions() {
 // --- Table Header ---
 function updateTableHeader() {
   const headerNames = namearr.slice(0, PLAYER_COUNT);
-  let headerRow = '<tr>';
+  let headerRow = '<tr><th class="round-index-header">#</th>';
   headerNames.forEach((name) => {
     headerRow += `<th>${name}</th>`;
   });
-  headerRow += '</tr>';
+  headerRow += '<th class="round-actions-header" aria-label="Xoá"></th></tr>';
   tableHead.innerHTML = headerRow;
   render();
 }
@@ -375,7 +386,6 @@ function resetGame() {
 
   players = [[], [], [], [], []];
   dataupdate = [0, 0, 0, 0, 0];
-  tr.length = 0;
   updateTableHeader();
   updateTotals();
   updateChartData();
@@ -448,16 +458,6 @@ function push() {
   for (let i = 0; i < PLAYER_COUNT; i++) {
     players[i].push(calculatedScores[i]);
   }
-
-  // Add to table rows
-  let row = '<tr>';
-  for (let i = 0; i < PLAYER_COUNT; i++) {
-    const val = calculatedScores[i];
-    const cls = val > 0 ? 'score-positive' : val < 0 ? 'score-negative' : '';
-    row += `<td class="${cls}">${val}</td>`;
-  }
-  row += '</tr>';
-  tr.push(row);
 
   updateTotals();
   updateEmptyState();
@@ -532,13 +532,30 @@ function updateLeader(maxTotal) {
   }
 }
 
+function getRoundCount() {
+  return players[0].length;
+}
+
 function render() {
-  tbody.innerHTML = tr.join('');
+  const rounds = getRoundCount();
+  let html = '';
+  for (let j = 0; j < rounds; j++) {
+    html += '<tr>';
+    html += `<td class="round-index">Ván ${j + 1}</td>`;
+    for (let i = 0; i < PLAYER_COUNT; i++) {
+      const val = players[i][j] || 0;
+      const cls = val > 0 ? 'score-positive' : val < 0 ? 'score-negative' : '';
+      html += `<td class="${cls}">${val}</td>`;
+    }
+    html += `<td class="round-actions"><button type="button" class="btn-delete-round" data-round="${j}" title="Xoá ván này" aria-label="Xoá ván ${j + 1}">🗑️</button></td>`;
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
   updateRoundCount();
 }
 
 function updateEmptyState() {
-  if (tr.length === 0) {
+  if (getRoundCount() === 0) {
     emptyState.classList.remove('hidden');
     document.getElementById('scoreTable').querySelector('tbody').classList.add('hidden');
   } else {
@@ -548,8 +565,38 @@ function updateEmptyState() {
 }
 
 function updateRoundCount() {
-  roundCount.textContent = tr.length === 0 ? '0 ván' : `${tr.length} ván`;
+  const count = getRoundCount();
+  roundCount.textContent = count === 0 ? '0 ván' : `${count} ván`;
 }
+
+// --- Delete a single round ---
+function deleteRound(index) {
+  if (index < 0 || index >= players[0].length) return;
+
+  for (let i = 0; i < PLAYER_COUNT; i++) {
+    players[i].splice(index, 1);
+  }
+
+  updateTotals();
+  updateEmptyState();
+  updateChartData();
+  chart.update();
+  render();
+  store();
+  showToast('Đã xoá ván đấu', 'success');
+}
+
+// Event delegation for round delete buttons
+tbody.addEventListener('click', (e) => {
+  const delBtn = e.target.closest('.btn-delete-round');
+  if (!delBtn) return;
+  const idx = parseInt(delBtn.dataset.round, 10);
+  showConfirmModal(() => deleteRound(idx), {
+    title: 'Xoá ván này?',
+    text: 'Ván đấu sẽ bị xoá và tổng điểm được tính lại. Bạn có chắc chắn?',
+    confirmLabel: 'Xoá ván',
+  });
+});
 
 // --- Local Storage ---
 const key = 'samlokScoreAppData';
@@ -574,21 +621,6 @@ function getStore() {
 
       for (let i = 0; i < 5; i++) {
         players[i] = item[`p${i + 1}`] || [];
-      }
-
-      // Restore table rows
-      if (players[0].length > 0) {
-        tr.length = 0;
-        for (let j = 0; j < players[0].length; j++) {
-          let row = '<tr>';
-          for (let i = 0; i < PLAYER_COUNT; i++) {
-            const val = players[i][j] || 0;
-            const cls = val > 0 ? 'score-positive' : val < 0 ? 'score-negative' : '';
-            row += `<td class="${cls}">${val}</td>`;
-          }
-          row += '</tr>';
-          tr.push(row);
-        }
       }
 
       // Restore player names in DOM
@@ -751,9 +783,6 @@ function init() {
   chart.update();
   render();
   // Ensure empty state is correct
-  if (tr.length === 0) {
-    // Already handled by updateEmptyState called via render -> but updateTableHeader calls render before tr might be populated
-  }
   updateEmptyState();
   setupReveal();
 
